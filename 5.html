@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Wish For You ✦</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --navy:#17253d;--blue:#76a9df;--sky:#dceeff;--white:#fff;
+ --pink:#f2b6c8;--pink-soft:#fff0f5;--orange:#f3a16f;
+ --black:#18202d;--gold:#e7bf68;--muted:#667085;
+ --shadow:0 25px 70px rgba(23,37,61,.16);
+}
+html,body{width:100%;height:100%}
+body{
+ font-family:"DM Sans",sans-serif;color:var(--black);overflow:hidden;
+ background:
+  radial-gradient(circle at 8% 10%,rgba(118,169,223,.30),transparent 27%),
+  radial-gradient(circle at 92% 88%,rgba(242,182,200,.26),transparent 28%),
+  linear-gradient(135deg,#f9fcff 0%,#edf6ff 48%,#fff5f8 100%);
+}
+.screen{
+ position:absolute;inset:0;width:100%;height:100svh;min-height:100svh;
+ padding:40px 20px 60px;display:flex;align-items:center;justify-content:center;
+ overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(20px);
+ transition:opacity .65s ease,transform .65s ease,visibility .65s ease;
+}
+.screen.active{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+.container{width:min(900px,100%);text-align:center;margin:auto;padding:24px 0;position:relative}
+
+/* Elegant paper/card frame for every page */
+.container:after{
+ content:"";position:absolute;inset:4px -4px;border:1px solid rgba(118,169,223,.15);
+ border-radius:38px;pointer-events:none;
+}
+.container:before{
+ content:"✦";display:block;color:var(--orange);font-size:.9rem;margin-bottom:8px;
+ position:relative;z-index:2;
+}
+.screen .container{
+ background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.95);
+ border-radius:34px;box-shadow:var(--shadow);backdrop-filter:blur(18px);
+ padding:48px 42px;
+}
+.screen:nth-of-type(2n) .container{
+ background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(220,238,255,.72));
+}
+.screen:nth-of-type(3n) .container{
+ background:linear-gradient(145deg,rgba(255,255,255,.93),rgba(255,240,245,.72));
+}
+
+/* Decorative corner ornaments */
+.container .corner{
+ display:none;
+}
+.kicker{color:#4d78ad;font-size:.68rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
+.title{
+ font-family:"Cormorant Garamond",serif;font-size:clamp(4rem,9vw,7rem);
+ line-height:.83;font-weight:600;letter-spacing:-.035em;margin:18px 0;
+ color:var(--navy)
+}
+.subtitle{max-width:560px;margin:auto;color:var(--muted);font-size:.9rem;line-height:1.9}
+.orange-text{color:var(--orange)}
+.btn{
+ border:0;border-radius:999px;padding:14px 27px;margin-top:27px;background:var(--navy);
+ color:#fff;font-family:inherit;font-weight:600;font-size:.82rem;cursor:pointer;
+ box-shadow:0 12px 28px rgba(23,37,61,.22);transition:.25s;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 18px 35px rgba(23,37,61,.27)}
+.btn.orange{background:var(--orange);color:#fff}
+
+/* Opening card */
+#s1 .container{
+ min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ background:
+  radial-gradient(circle at 18% 20%,rgba(118,169,223,.22),transparent 25%),
+  radial-gradient(circle at 82% 80%,rgba(242,182,200,.25),transparent 25%),
+  #fff;
+}
+#s1 .title{font-size:clamp(4.2rem,10vw,8rem)}
+#s1 .container:after{
+ border:1px solid rgba(243,161,111,.35);box-shadow:inset 0 0 0 9px rgba(220,238,255,.35),inset 0 0 0 12px rgba(242,182,200,.18);
+}
+
+/* Input card */
+.paper{
+ width:min(510px,100%);margin:auto;padding:38px 32px;background:#fff;
+ border:1px solid #e1eaf4;border-radius:25px;box-shadow:0 18px 45px rgba(23,37,61,.10);
+}
+.paper h1,.letter-title,.sky-message h1,.closing h1{font-family:"Cormorant Garamond",serif;font-weight:600}
+.paper h1{font-size:3.5rem;line-height:.9;margin:15px 0;color:var(--navy)}
+.paper p{color:var(--muted);line-height:1.75;font-size:.84rem}
+.input{
+ width:100%;max-width:270px;display:block;margin:28px auto 5px;padding:15px;
+ border:1px solid #cdddec;border-radius:15px;outline:none;text-align:center;
+ font-family:inherit;font-size:1.4rem;letter-spacing:.18em;background:#fbfdff;
+}
+.input:focus{border-color:var(--blue);box-shadow:0 0 0 5px rgba(118,169,223,.15)}
+.hint{color:#9aa5b5;font-size:.7rem;margin-top:10px}
+.year-error{min-height:48px;max-width:370px;margin:13px auto 5px;color:#dc2626;font-size:.78rem;line-height:1.65;opacity:0;transition:.25s}
+.year-error.show{opacity:1}.year-error.red{color:#dc2626}
+.input.shake{animation:shake .48s ease}
+@keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}
+
+/* Age card */
+.age{font-family:"Cormorant Garamond",serif;font-size:clamp(8rem,24vw,15rem);line-height:.7;color:var(--blue);margin:38px 0 22px;font-weight:600}
+.age-label{font-family:"Cormorant Garamond",serif;font-size:2rem;color:var(--navy)}
+.age-text{max-width:520px;margin:18px auto;color:var(--muted);line-height:1.8}
+
+/* Cake card */
+#s4 .container{
+ background:
+  radial-gradient(circle at 50% 12%,rgba(243,161,111,.16),transparent 25%),
+  linear-gradient(145deg,#fff,#fff6f8 52%,#eef7ff);
+}
+.cake-wrap{position:relative;width:min(390px,92vw);height:330px;margin:5px auto;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 22px 24px rgba(23,37,61,.16))}
+.cake-art{position:relative;width:360px;height:310px;max-width:100%}
+.cake-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cake-top{fill:#fff;stroke:#d9e4f0;stroke-width:2}.cake-side{fill:url(#cakeSide);stroke:#d9e4f0;stroke-width:2}
+.cake-blue{fill:#4e82c2}.cake-blue-light{fill:#8bb4e4}.cake-orange{fill:#f3a16f}.cake-gold{fill:#e7bf68}.cake-pink{fill:#e7a9bc}
+.cake-number{font-family:"Cormorant Garamond",serif;font-size:58px;font-weight:700;fill:#315fba;text-anchor:middle;dominant-baseline:middle}
+.candle-flame{transform-origin:center bottom;animation:flicker .42s ease-in-out infinite alternate;filter:drop-shadow(0 0 7px #f3a16f)}
+.candle-flame-inner{fill:#fff}
+.cake-smoke{opacity:0;transform-origin:center bottom}
+.blown .candle-flame{display:none}.blown .cake-smoke{opacity:.75;animation:smoke 1.5s ease-out forwards}
+.blow-wind{position:absolute;right:16px;top:77px;color:#8eb8e5;font-size:24px;opacity:0;pointer-events:none}
+.blown .blow-wind{animation:blow 1.05s ease-out forwards}
+@keyframes flicker{from{transform:scale(1) rotate(-2deg)}to{transform:scale(1.08) rotate(3deg)}}
+@keyframes smoke{to{opacity:0;transform:translateY(-72px) translateX(14px) scale(1.45)}}
+@keyframes blow{0%{opacity:0;transform:translateX(-10px)}20%{opacity:1}100%{opacity:0;transform:translateX(82px)}}
+.blow-arrow{color:var(--muted);font-size:.76rem;line-height:1.5}
+
+/* Letter/card inside card */
+.letter{
+ width:min(650px,100%);max-height:58vh;overflow:auto;margin:auto;padding:35px 38px;
+ background:linear-gradient(145deg,#fff,#fff8fa);border:1px solid #efdfe5;border-radius:25px;
+ box-shadow:0 15px 40px rgba(23,37,61,.08);color:#374151;line-height:2;
+ font-family:"Cormorant Garamond",serif;font-size:1.1rem;text-align:left;position:relative;
+}
+.letter:before,.letter:after{
+ content:"";position:absolute;width:28px;height:28px;border-color:var(--orange);opacity:.65;
+}
+.letter:before{left:14px;top:14px;border-left:1px solid;border-top:1px solid}
+.letter:after{right:14px;bottom:14px;border-right:1px solid;border-bottom:1px solid}
+.letter-title{font-size:3.4rem;color:var(--navy);margin-bottom:15px}
+
+.card{
+ width:min(600px,100%);margin:12px auto;padding:22px 24px;
+ background:#fff;border:1px solid rgba(118,169,223,.18);border-left:4px solid var(--blue);
+ border-radius:18px;box-shadow:0 12px 30px rgba(23,37,61,.07);text-align:left;
+}
+.card:nth-of-type(2){border-left-color:var(--pink)}
+.card h3{color:var(--navy);margin-bottom:7px;font-size:.92rem}.card p{color:var(--muted);line-height:1.8;font-size:.84rem}
+
+/* Blue/pink message card */
+.sky-message{
+ width:min(650px,100%);margin:auto;padding:48px 30px;border-radius:28px;
+ background:linear-gradient(145deg,#eaf5ff,#fff0f5);border:1px solid #fff;
+ box-shadow:0 20px 55px rgba(23,37,61,.12);color:var(--navy)
+}
+.sky-message h1{font-size:4rem;margin:15px 0}.sky-message p{line-height:1.9;color:#667085}
+#s8 .container{background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(220,238,255,.82))}
+
+/* 200 OK */
+#s9 .container{background:linear-gradient(145deg,#fff,#eef7ff)}
+#s9 .container div[style*="200 OK"]{color:var(--blue)!important;text-shadow:0 8px 25px rgba(118,169,223,.22)}
+
+/* Ending */
+.closing{
+ width:min(650px,100%);padding:50px 30px;margin:auto;border-radius:28px;
+ background:linear-gradient(145deg,#fff,#fff1f5 58%,#edf7ff);color:var(--black);
+ box-shadow:0 25px 70px rgba(0,0,0,.18);border:1px solid #fff;
+}
+.closing h1{font-size:5rem;color:var(--navy);line-height:.8;margin:20px 0}
+.closing p{color:var(--muted);line-height:1.8}
+
+/* Fixed UI */
+.nav{position:fixed;top:18px;left:18px;z-index:100}
+.back{
+ border:1px solid rgba(118,169,223,.25);background:rgba(255,255,255,.8);
+ backdrop-filter:blur(10px);width:42px;height:42px;border-radius:50%;
+ cursor:pointer;font-size:1.2rem;color:var(--navy);box-shadow:0 8px 25px rgba(23,37,61,.08)
+}
+.progress{
+ position:fixed;bottom:15px;right:15px;font-size:.65rem;color:#667085;z-index:100;
+ padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.75);backdrop-filter:blur(8px)
+}
+.confetti{position:fixed;top:-20px;width:8px;height:14px;z-index:200;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+@media(max-width:480px){
+ .screen{padding:24px 14px 65px;align-items:flex-start}
+ .screen .container{padding:35px 17px;border-radius:27px}
+ .container:after{inset:3px -3px;border-radius:30px}
+ .title{font-size:clamp(3.2rem,13vw,5rem)}
+ #s1 .container{min-height:500px}
+ #s1 .title{font-size:clamp(3.8rem,15vw,5.8rem)}
+ .paper{padding:30px 18px}.paper h1{font-size:2.8rem}
+ .age{font-size:clamp(7.5rem,32vw,10rem)}
+ .cake-wrap{width:100%;height:300px}.cake-art{width:360px;height:310px}
+ .letter{max-height:52vh;padding:28px 20px;font-size:.95rem}
+ .letter-title{font-size:2.7rem}.sky-message{padding:35px 21px}.sky-message h1{font-size:3rem}
+ .closing{padding:38px 21px}.closing h1{font-size:4rem}
+ #s4{padding-bottom:75px}
+}
+</style>
+
+<style id="final-mobile-card-fix">
+html,body{
+    background:#eef6ff !important;
+    color:#18202d !important;
+}
+
+body{
+    background:
+        radial-gradient(circle at 0% 0%, rgba(118,169,223,.38), transparent 30%),
+        radial-gradient(circle at 100% 100%, rgba(242,182,200,.34), transparent 30%),
+        linear-gradient(135deg,#f8fcff 0%,#eaf5ff 50%,#fff3f7 100%) !important;
+}
+
+/* Every page gets a visible light background */
+.screen,
+.screen.active,
+#s1,#s2,#s3,#s4,#s5,#s6,#s7,#s8,#s9,#s10{
+    background:
+        radial-gradient(circle at 12% 12%,rgba(118,169,223,.25),transparent 27%),
+        radial-gradient(circle at 88% 86%,rgba(242,182,200,.24),transparent 28%),
+        linear-gradient(135deg,#ffffff 0%,#edf7ff 52%,#fff5f8 100%) !important;
+    color:#18202d !important;
+}
+
+/* Main visible card */
+.screen .container,
+.screen.active .container{
+    position:relative !important;
+    display:block !important;
+    width:min(900px,100%) !important;
+    min-height:0 !important;
+    margin:auto !important;
+    padding:52px 42px !important;
+    background:rgba(255,255,255,.93) !important;
+    border:2px solid rgba(118,169,223,.28) !important;
+    border-radius:34px !important;
+    box-shadow:
+        0 30px 80px rgba(23,37,61,.15),
+        inset 0 0 0 7px rgba(255,255,255,.72),
+        inset 0 0 0 9px rgba(242,182,200,.12) !important;
+    backdrop-filter:blur(16px);
+}
+
+/* Double-line elegant frame */
+.screen .container:after{
+    content:"" !important;
+    position:absolute !important;
+    inset:13px !important;
+    display:block !important;
+    border:1px solid rgba(118,169,223,.28) !important;
+    border-radius:25px !important;
+    pointer-events:none !important;
+    z-index:0 !important;
+}
+
+.screen .container:before{
+    content:"✦" !important;
+    position:relative !important;
+    z-index:3 !important;
+    display:block !important;
+    width:34px !important;
+    height:34px !important;
+    line-height:32px !important;
+    margin:0 auto 14px !important;
+    color:#f3a16f !important;
+    background:#fff !important;
+    border:1px solid #f2b6c8 !important;
+    border-radius:50% !important;
+}
+
+/* Keep all actual content above the frame */
+.screen .container > *{
+    position:relative;
+    z-index:2;
+}
+
+/* Inner message cards */
+.paper,.letter,.card,.sky-message,.closing{
+    position:relative !important;
+    background:#fff !important;
+    border:1px solid rgba(118,169,223,.22) !important;
+    box-shadow:0 15px 40px rgba(23,37,61,.10) !important;
+}
+
+/* Ensure dark-page text is readable */
+#s8,#s10,#s8 h1,#s8 p,#s10 h1,#s10 p{
+    color:#18202d !important;
+}
+#s8 .container,#s10 .container{
+    background:rgba(255,255,255,.95) !important;
+}
+#s8 .sky-message{
+    background:linear-gradient(145deg,#eaf5ff,#fff0f5) !important;
+}
+#s10 .closing{
+    background:linear-gradient(145deg,#fff,#fff1f5 58%,#edf7ff) !important;
+}
+
+/* Mobile: make the frame obvious and prevent clipping */
+@media(max-width:600px){
+    body{
+        overflow:hidden !important;
+        background:linear-gradient(145deg,#edf7ff,#fff4f8) !important;
+    }
+    .screen{
+        padding:18px 10px 70px !important;
+        align-items:flex-start !important;
+    }
+    .screen .container,
+    .screen.active .container{
+        width:100% !important;
+        margin:8px auto 25px !important;
+        padding:42px 17px 45px !important;
+        border-radius:27px !important;
+        border-width:2px !important;
+        box-shadow:
+            0 20px 50px rgba(23,37,61,.15),
+            inset 0 0 0 5px rgba(255,255,255,.85),
+            inset 0 0 0 7px rgba(242,182,200,.14) !important;
+    }
+    .screen .container:after{
+        inset:10px !important;
+        border-radius:20px !important;
+        border-color:rgba(118,169,223,.30) !important;
+    }
+    .screen .container:before{
+        width:30px !important;
+        height:30px !important;
+        line-height:28px !important;
+        margin-bottom:12px !important;
+    }
+    .title{font-size:clamp(3.2rem,14vw,5rem) !important}
+    .paper{padding:28px 16px !important}
+    .letter{padding:28px 18px !important;max-height:52svh !important}
+    .card{padding:19px 17px !important}
+    .sky-message{padding:32px 18px !important}
+    .closing{padding:34px 18px !important}
+}
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HALAMAN 1
+===================================================== -->
+
+<section
+    class="screen active"
+    id="s1">
+
+
+    <div class="container">
+        <div class="kicker">A small page, made for one person</div>
+        <h1 class="title">A Little<br><span class="orange-text">Wish</span><br>For You</h1>
+        <p class="subtitle">
+            Ada satu halaman kecil yang sengaja dibuat perlahan.
+            Jangan terburu-buru—ikuti saja setiap langkahnya sampai akhir.
+        </p>
+        <button class="btn" onclick="go(2)">Mulai perlahan →</button>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HALAMAN 2 — INPUT TAHUN
+===================================================== -->
+
+<section
+    class="screen"
+    id="s2">
+
+
+    <div class="container">
+        <div class="paper">
+            <div class="kicker">Sebelum masuk lebih jauh</div>
+            <h1>Boleh tahu<br>satu hal?</h1>
+            <p>
+                Masukkan tahun lahirmu.<br>
+                Ada sedikit kejutan yang akan menyesuaikan halaman ini untukmu.
+            </p>
+            <input id="birthYear" class="input" type="text" inputmode="numeric" maxlength="4"
+                   placeholder="YYYY" autocomplete="off">
+            <div class="hint">Tenang, hanya tahunnya saja :)</div>
+            <div id="yearError" class="year-error" aria-live="polite"></div>
+            <button id="yearBtn" class="btn" onclick="setAge()">Lanjutkan →</button>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HALAMAN 3 — UMUR
+===================================================== -->
+
+<section
+    class="screen"
+    id="s3">
+
+
+    <div class="container">
+        <div class="kicker">Satu angka, satu perjalanan</div>
+        <div class="age" id="ageNumber">19</div>
+        <div class="age-label">tahun</div>
+        <p class="age-text" id="ageText">
+            Tahun perjalananmu, penuh cerita, tawa, air mata,
+            dan hal-hal kecil yang membentuk dirimu sampai hari ini.
+        </p>
+        <button class="btn" onclick="go(4)">Lanjut ke hari spesialmu →</button>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HALAMAN 4 — KUE
+===================================================== -->
+
+<section
+    class="screen"
+    id="s4">
+
+
+    <div class="container">
+        <div class="kicker">Babak utama dimulai di sini</div>
+        <h1 class="title">Make a<br><span class="orange-text">Wish.</span></h1>
+        <div class="cake-wrap" id="cakeWrap">
+            <div class="cake-art">
+                <svg class="cake-svg" viewBox="0 0 360 310">
+                    <defs>
+                        <linearGradient id="cakeSide" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stop-color="#ffffff"/>
+                            <stop offset="1" stop-color="#e9eef7"/>
+                        </linearGradient>
+                    </defs>
+                    <ellipse cx="180" cy="287" rx="138" ry="15" fill="#d5deea"/>
+                    <ellipse cx="180" cy="281" rx="128" ry="12" fill="#f8fafc" stroke="#cbd7e5" stroke-width="2"/>
+                    <rect x="72" y="187" width="216" height="88" rx="18" class="cake-side"/>
+                    <ellipse cx="180" cy="187" rx="108" ry="27" class="cake-top"/>
+                    <path d="M74 220 C98 233 118 208 140 222 S183 233 204 219 S248 233 286 217"
+                          fill="none" stroke="#315fba" stroke-width="9" stroke-linecap="round"/>
+                    <path d="M78 250 C101 262 119 237 140 251 S180 261 202 248 S247 262 283 247"
+                          fill="none" stroke="#f2a77e" stroke-width="5" stroke-linecap="round"/>
+                    <rect x="103" y="133" width="154" height="70" rx="16" class="cake-side"/>
+                    <ellipse cx="180" cy="133" rx="77" ry="22" class="cake-top"/>
+                    <path d="M107 155 C125 165 141 146 156 157 S184 168 198 156 S229 167 253 154"
+                          fill="none" stroke="#315fba" stroke-width="8" stroke-linecap="round"/>
+                    <path d="M112 133 C120 144 127 143 132 133 C138 147 146 146 151 133 C158 145 166 145 171 133 C178 148 188 147 193 133 C201 145 209 145 215 133 C222 146 231 145 238 133 C245 143 249 141 251 133"
+                          fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+                    <g transform="translate(126 193)">
+                        <path d="M0 0 C-22 -13 -28 8 -9 10 C0 11 6 6 8 1 C5 -4 2 -8 0 0Z" class="cake-blue"/>
+                        <path d="M8 1 C22 -13 29 8 10 10 C1 11 -4 6 -1 1 C1 -4 4 -8 8 1Z" class="cake-blue-light"/>
+                        <circle cx="8" cy="3" r="5" class="cake-gold"/>
+                    </g>
+                    <g transform="translate(236 193)">
+                        <path d="M0 0 C-22 -13 -28 8 -9 10 C0 11 6 6 8 1 C5 -4 2 -8 0 0Z" class="cake-blue"/>
+                        <path d="M8 1 C22 -13 29 8 10 10 C1 11 -4 6 -1 1 C1 -4 4 -8 8 1Z" class="cake-blue-light"/>
+                        <circle cx="8" cy="3" r="5" class="cake-gold"/>
+                    </g>
+                    <g transform="translate(96 211)">
+                        <circle cx="0" cy="-8" r="7" class="cake-orange"/><circle cx="9" cy="-2" r="7" class="cake-orange"/>
+                        <circle cx="5" cy="8" r="7" class="cake-orange"/><circle cx="-6" cy="7" r="7" class="cake-orange"/>
+                        <circle cx="-9" cy="-2" r="7" class="cake-orange"/><circle cx="0" cy="0" r="5" class="cake-gold"/>
+                    </g>
+                    <g transform="translate(264 211)">
+                        <circle cx="0" cy="-8" r="7" class="cake-pink"/><circle cx="9" cy="-2" r="7" class="cake-pink"/>
+                        <circle cx="5" cy="8" r="7" class="cake-pink"/><circle cx="-6" cy="7" r="7" class="cake-pink"/>
+                        <circle cx="-9" cy="-2" r="7" class="cake-pink"/><circle cx="0" cy="0" r="5" class="cake-gold"/>
+                    </g>
+                    <g id="ageCandle1">
+                        <rect x="148" y="69" width="29" height="65" rx="8" fill="#f8fafc" stroke="#cbd9ea" stroke-width="2"/>
+                        <path d="M148 84H177 M148 101H177 M148 118H177" stroke="#9db9ea" stroke-width="3"/>
+                        <text id="svgCandle1" x="162.5" y="106" class="cake-number">1</text>
+                        <g class="candle-flame">
+                            <path d="M162.5 66 C150 52 162 42 164 32 C174 47 178 57 169 66 C167 68 165 69 162.5 66Z" fill="#ffd166"/>
+                            <path d="M163 61 C158 53 164 48 165 43 C170 52 171 57 166 62 C165 63 164 63 163 61Z" class="candle-flame-inner"/>
+                        </g>
+                    </g>
+                    <g id="ageCandle2">
+                        <rect x="183" y="69" width="29" height="65" rx="8" fill="#f8fafc" stroke="#cbd9ea" stroke-width="2"/>
+                        <path d="M183 84H212 M183 101H212 M183 118H212" stroke="#9db9ea" stroke-width="3"/>
+                        <text id="svgCandle2" x="197.5" y="106" class="cake-number">9</text>
+                        <g class="candle-flame">
+                            <path d="M197.5 66 C185 52 197 42 199 32 C209 47 213 57 204 66 C202 68 200 69 197.5 66Z" fill="#ffd166"/>
+                            <path d="M198 61 C193 53 199 48 200 43 C205 52 206 57 201 62 C200 63 199 63 198 61Z" class="candle-flame-inner"/>
+                        </g>
+                    </g>
+                    <g class="cake-smoke">
+                        <path d="M163 65 C150 48 174 43 160 25 C151 14 170 8 165 -6" fill="none" stroke="#dbeafe" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M198 65 C185 48 209 43 195 25 C186 14 205 8 200 -6" fill="none" stroke="#dbeafe" stroke-width="5" stroke-linecap="round"/>
+                    </g>
+                </svg>
+                <div class="blow-wind">〰〰〰</div>
+            </div>
+        </div>
+        <p class="blow-arrow">✦ Tarik napas, buat satu harapan.<br>Sekarang, tiup lilinnya.</p>
+        <button id="blowBtn" class="btn orange" onclick="blowCandles()">Tiup Lilin 🌬</button>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HALAMAN 5
+===================================================== -->
+
+<section
+    class="screen"
+    id="s5">
+
+
+    <div class="container">
+        <div class="kicker">Setelah satu harapan</div>
+        <h1 class="letter-title">Untukmu,</h1>
+        <div class="letter">
+            <p>Selamat ulang tahun.</p><br>
+            <p>
+                Semoga bertambahnya usia bukan hanya tentang angka,
+                tetapi tentang semakin banyak hal baik yang kamu temui,
+                semakin banyak alasan untuk tersenyum, dan semakin kuat
+                langkahmu menghadapi hari-hari yang akan datang.
+            </p><br>
+            <p>
+                Mungkin halaman kecil ini tidak seberapa.
+                Tapi setiap bagian di dalamnya dibuat dengan satu niat:
+                membuat hari spesialmu terasa sedikit lebih spesial.
+            </p>
+        </div>
+        <button class="btn" onclick="go(6)">Masih ada pesan →</button>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HALAMAN 6
+===================================================== -->
+
+<section
+    class="screen"
+    id="s6">
+
+
+    <div class="container">
+        <div class="kicker">Bukan sekadar ucapan</div>
+        <h1 class="title" style="font-size:4.8rem">A little<br><span class="orange-text">message.</span></h1>
+        <div class="card">
+            <h3>Tidak perlu membalas.</h3>
+            <p>
+                Cukup baca sampai selesai. Anggap ini sebagai hadiah kecil
+                yang tidak perlu dibalas dengan apa pun.
+            </p>
+        </div>
+        <div class="card">
+            <h3>Tentang hari ini.</h3>
+            <p>
+                Di antara banyak orang yang mungkin mengucapkan selamat,
+                semoga kamu tetap menemukan satu ucapan yang terasa tulus
+                dan membuatmu tersenyum.
+            </p>
+        </div>
+        <button class="btn" onclick="go(7)">Lanjut →</button>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HALAMAN 7
+===================================================== -->
+
+<section
+    class="screen"
+    id="s7">
+
+
+    <div class="container">
+        <div class="kicker">Dan untuk hari-hari setelah ini</div>
+        <h1 class="title" style="font-size:5rem">Semoga<br><span class="orange-text">baik</span><br>menemukanmu.</h1>
+        <p class="subtitle">
+            Semoga langkahmu dimudahkan, harapanmu menemukan jalannya,
+            orang-orang baik datang di waktu yang tepat, dan kamu selalu
+            punya alasan sederhana untuk tetap bahagia.
+        </p>
+        <button class="btn" onclick="go(8)">Ada satu pesan terakhir →</button>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HALAMAN 8
+===================================================== -->
+
+<section
+    class="screen"
+    id="s8">
+
+
+    <div class="container">
+        <div class="sky-message">
+            <div class="kicker" style="color:#ffd166">Pesan terakhir</div>
+            <h1>Semoga bahagia.</h1>
+            <p>
+                Bukan hanya hari ini.<br>
+                Bukan hanya ketika semuanya berjalan sesuai rencana.
+                <br><br>
+                Semoga bahkan di hari yang biasa,
+                kamu tetap menemukan sesuatu yang layak disyukuri.
+            </p>
+            <button class="btn" style="background:white;color:#315fba" onclick="go(9)">Cek status →</button>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HALAMAN 9
+===================================================== -->
+
+<section
+    class="screen"
+    id="s9">
+
+
+    <div class="container">
+        <div class="kicker">SYSTEM STATUS</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:5rem;color:#315fba;margin:25px 0;line-height:.9">
+            200 OK
+        </div>
+        <p class="subtitle">
+            Birthday request berhasil diproses.<br>
+            Wish delivered successfully.<br><br>
+            Tidak ada error. Tidak ada pending request.
+            Hanya satu ucapan yang berhasil sampai kepadamu.
+        </p>
+        <button class="btn" onclick="go(10)">Selesaikan →</button>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HALAMAN 10
+===================================================== -->
+
+<section
+    class="screen"
+    id="s10">
+
+
+    <div class="container">
+        <div class="closing">
+            <div class="kicker">END OF MESSAGE</div>
+            <h1>Selamat<br>ulang tahun.</h1>
+            <p>
+                Terima kasih sudah mengikuti halaman kecil ini sampai akhir.
+                <br><br>
+                Semoga usia yang baru membawa lebih banyak cerita baik,
+                kesempatan baru, dan alasan untuk tersenyum.
+                <br><br>
+                <strong>Birthday system: completed ✓</strong>
+            </p>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<div class="nav">
+
+    <button
+        class="back"
+        onclick="previousScreen()">
+
+        ←
+
+    </button>
+
+</div>
+
+
+<div
+    class="progress"
+    id="progress">
+
+    1 / 10
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   VARIABEL
+===================================================== */
+
+let current = 1;
+
+let age = 19;
+
+let blown = false;
+
+/*
+ * Jumlah percobaan hanya digunakan
+ * untuk menentukan pesan error.
+ *
+ * TIDAK digunakan untuk mengunci.
+ */
+
+let yearAttempts = 0;
+
+
+/* =====================================================
+   NAVIGASI
+===================================================== */
+
+function go(number){
+
+    if(number < 1 || number > 10){
+        return;
+    }
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen => {
+
+            screen.classList.remove("active");
+
+        });
+
+
+    const target =
+        document.getElementById(
+            "s" + number
+        );
+
+
+    if(target){
+
+        target.classList.add("active");
+
+        current = number;
+
+        document
+            .getElementById("progress")
+            .textContent =
+                number + " / 10";
+
+    }
+
+}
+
+
+function previousScreen(){
+
+    if(current > 1){
+
+        go(current - 1);
+
+    }
+
+}
+
+
+/* =====================================================
+   VALIDASI TAHUN LAHIR
+===================================================== */
+function setAge(){
+
+    const input = document.getElementById("birthYear");
+    const error = document.getElementById("yearError");
+
+    const raw = input.value.trim();
+    const year = Number(raw);
+    const currentYear = new Date().getFullYear();
+
+    // Tahun harus 4 digit dan masuk akal
+    const validYear =
+        /^\d{4}$/.test(raw) &&
+        year >= 1900 &&
+        year <= currentYear;
+
+
+    /* =================================================
+       PERCOBAAN 1
+       APAPUN INPUTNYA → SELALU ERROR
+    ================================================= */
+
+    if(yearAttempts === 0){
+
+        yearAttempts++;
+
+        error.className = "year-error show red";
+
+        error.innerHTML = `
+            Hmm... 🤔
+            <br>
+            Apakah ini benar tahun lahirmu?
+            <br>
+            Coba masukkan sekali lagi
+            yang benar. ✦
+        `;
+
+        shakeInput(input);
+
+        // Kosongkan input otomatis
+        setTimeout(() => {
+            input.value = "";
+            input.focus();
+        }, 350);
+
+        return;
+    }
+
+
+    /* =================================================
+       PERCOBAAN 2
+       APAPUN INPUTNYA → SELALU ERROR
+    ================================================= */
+
+    if(yearAttempts === 1){
+
+        yearAttempts++;
+
+        error.className = "year-error show red";
+
+        error.innerHTML = `
+            Apakah ini sudah benar? 😅
+            <br>
+            Pastikan masukkan yang benar ya,
+            kalau tidak proses ini tidak akan berhasil.
+            <br>
+            Kalau yang tadi memang benar,
+            mohon masukkan sekali lagi. 😊
+        `;
+
+        shakeInput(input);
+
+        // Kosongkan input otomatis
+        setTimeout(() => {
+            input.value = "";
+            input.focus();
+        }, 350);
+
+        return;
+    }
+
+
+    /* =================================================
+       PERCOBAAN 3
+       BARU BOLEH BERHASIL
+    ================================================= */
+
+    if(yearAttempts >= 2){
+
+        if(validYear){
+
+            yearAttempts++;
+
+            masukKeHalamanUmur(year);
+
+            return;
+
+        }
+
+        // Kalau percobaan ke-3 bukan tahun yang masuk akal
+        error.className = "year-error show red";
+
+        error.innerHTML = `
+            Hmm... 🤨
+            <br>
+            Masukkan tahun lahir dalam format 4 digit ya.
+            <br>
+            Contoh: 2007
+        `;
+
+        shakeInput(input);
+
+        setTimeout(() => {
+            input.value = "";
+            input.focus();
+        }, 350);
+
+        return;
+    }
+
+}
+
+
+/* =====================================================
+   KOSONGKAN INPUT
+===================================================== */
+
+function clearYearInput(input){
+
+    setTimeout(() => {
+
+        input.value = "";
+
+        input.focus();
+
+    },250);
+
+}
+
+
+/* =====================================================
+   EFEK GETAR
+===================================================== */
+
+function shakeInput(input){
+
+    input.classList.remove(
+        "shake"
+    );
+
+
+    /*
+     * Paksa browser mengulang
+     * animasi dari awal.
+     */
+
+    void input.offsetWidth;
+
+
+    input.classList.add(
+        "shake"
+    );
+
+}
+
+
+/* =====================================================
+   BERHASIL
+===================================================== */
+
+function masukKeHalamanUmur(
+    year
+){
+
+    const currentYear =
+        new Date().getFullYear();
+
+
+    age =
+        currentYear - year;
+
+
+    /*
+     * Tampilkan umur.
+     */
+
+    document
+        .getElementById(
+            "ageNumber"
+        )
+        .textContent =
+            age;
+
+
+    /*
+     * Teks umur.
+     */
+
+    document
+        .getElementById(
+            "ageText"
+        )
+        .textContent =
+
+            age +
+            " tahun perjalananmu, penuh cerita, " +
+            "tawa, air mata, dan hal-hal indah " +
+            "yang membentuk dirimu hari ini.";
+
+
+    /*
+     * Atur angka lilin.
+     */
+
+    setCakeNumbers(
+        age
+    );
+
+
+    /*
+     * Bersihkan error.
+     */
+
+    const error =
+        document.getElementById(
+            "yearError"
+        );
+
+
+    error.className =
+        "year-error";
+
+
+    error.innerHTML =
+        "";
+
+
+    /*
+     * Ubah tombol.
+     */
+
+    const button =
+        document.getElementById(
+            "yearBtn"
+        );
+
+
+    button.textContent =
+        "Tahun diterima ✓";
+
+
+    /*
+     * Masuk ke halaman umur.
+     */
+
+    setTimeout(() => {
+
+        go(3);
+
+    },350);
+
+}
+
+
+/* =====================================================
+   ANGKA LILIN
+===================================================== */
+
+function setCakeNumbers(
+    number
+){
+
+    const digits =
+        String(number);
+
+
+    const candle1 =
+        document.getElementById(
+            "ageCandle1"
+        );
+
+
+    const candle2 =
+        document.getElementById(
+            "ageCandle2"
+        );
+
+
+    const n1 =
+        document.getElementById(
+            "svgCandle1"
+        );
+
+
+    const n2 =
+        document.getElementById(
+            "svgCandle2"
+        );
+
+
+    /*
+     * UMUR SATU DIGIT
+     */
+
+    if(digits.length === 1){
+
+        n1.textContent =
+            digits;
+
+
+        candle2.style.display =
+            "none";
+
+
+        candle1.style.transform =
+            "translateX(17px)";
+
+    }
+
+
+    /*
+     * UMUR DUA DIGIT
+     */
+
+    else{
+
+        n1.textContent =
+            digits[0];
+
+
+        n2.textContent =
+            digits[1];
+
+
+        candle1.style.display =
+            "block";
+
+
+        candle2.style.display =
+            "block";
+
+
+        candle1.style.transform =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================================
+   TIUP LILIN
+===================================================== */
+
+function blowCandles(){
+
+    if(blown){
+
+        return;
+
+    }
+
+
+    blown = true;
+
+
+    const cake =
+        document.getElementById(
+            "cakeWrap"
+        );
+
+
+    cake.classList.add(
+        "blown"
+    );
+
+
+    const button =
+        document.getElementById(
+            "blowBtn"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Lilin padam ✦";
+
+
+    /*
+     * Confetti.
+     */
+
+    createConfetti();
+
+
+    /*
+     * Setelah animasi:
+     * lanjut ke pesan.
+     */
+
+    setTimeout(() => {
+
+        go(5);
+
+    },2200);
+
+}
+
+
+/* =====================================================
+   CONFETTI
+===================================================== */
+
+function createConfetti(){
+
+    const amount = 90;
+
+
+    for(
+        let i = 0;
+        i < amount;
+        i++
+    ){
+
+        const piece =
+            document.createElement(
+                "div"
+            );
+
+
+        piece.className =
+            "confetti";
+
+
+        const colors = [
+
+            "#2563eb",
+            "#5b8df2",
+            "#ff9f68",
+            "#f4a7b9",
+            "#ffd166",
+            "#ffffff"
+
+        ];
+
+
+        piece.style.background =
+            colors[
+                Math.floor(
+                    Math.random()
+                    *
+                    colors.length
+                )
+            ];
+
+
+        piece.style.left =
+            Math.random()
+            *
+            100
+            +
+            "vw";
+
+
+        piece.style.animationDuration =
+            (
+                2 +
+                Math.random() *
+                2.5
+            )
+            +
+            "s";
+
+
+        piece.style.animationDelay =
+            Math.random()
+            *
+            .7
+            +
+            "s";
+
+
+        piece.style.transform =
+            "rotate(" +
+            Math.random()
+            *
+            360 +
+            "deg)";
+
+
+        document.body.appendChild(
+            piece
+        );
+
+
+        setTimeout(() => {
+
+            piece.remove();
+
+        },5000);
+
+    }
+
+}
+
+
+/* =====================================================
+   ENTER
+===================================================== */
+
+document
+    .getElementById(
+        "birthYear"
+    )
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(
+                event.key ===
+                "Enter"
+            ){
+
+                setAge();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   SAAT MENGETIK:
+   ERROR DIHILANGKAN
+===================================================== */
+
+document
+    .getElementById(
+        "birthYear"
+    )
+    .addEventListener(
+        "input",
+        function(){
+
+            this.classList.remove(
+                "shake"
+            );
+
+
+            const error =
+                document.getElementById(
+                    "yearError"
+                );
+
+
+            error.classList.remove(
+                "show"
+            );
+
+
+            const button =
+                document.getElementById(
+                    "yearBtn"
+                );
+
+
+            button.textContent =
+                "Lanjutkan →";
+
+        }
+    );
+
+
+/* =====================================================
+   INISIALISASI
+===================================================== */
+
+setCakeNumbers(
+    age
+);
+
+</script>
+
+</body>
+</html>
